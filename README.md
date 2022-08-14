@@ -1,3 +1,6 @@
-# Lumen PHP Framework
+# Topic covered
 
-(1) Lumen is Micro framework of laravel
+(1) Database Migration, Seeding
+(2) Implementing Relationship with Model
+
+

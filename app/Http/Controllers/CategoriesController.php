@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\CategoryFeature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\SingleCategory;
 
 class CategoriesController extends Controller {
 
@@ -18,7 +20,9 @@ class CategoriesController extends Controller {
 
         $categories = $this->filterAndResponse($request, $query);
 
-        return response()->json(['categories' => $categories], 200);
+        return new CategoryCollection($categories);
+
+//        return response()->json(['categories' => $categories], 200);
     }
 
     public function store(Request $request) {
@@ -33,11 +37,10 @@ class CategoriesController extends Controller {
         }
 
         $category = new Category();
-
-        $category->title = $request->input('title');
-        $category->description = $request->input('description');
-        $category->parent_id = $request->input('parent_id') != '' ? $request->input('parent_id') : null;
-        $category->featured = $request->input('featured');
+        $category->title = $request->title;
+        $category->description = $request->description;
+        $category->parent_id = $request->parent_id != '' ? $request->parent_id : null;
+        $category->featured = $request->featured;
         $category->save();
 
         $this->insertFeatures($request, $category);
@@ -47,6 +50,8 @@ class CategoriesController extends Controller {
 
     public function show($id) {
         $category = Category::with('parent', 'features')->findOrFail($id);
+        return new SingleCategory($category);
+//        echo "<pre>";print_r($category->toArray());exit;
 
         return response()->json(['category' => $category], 200);
     }

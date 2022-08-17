@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\SingleCategory;
+use Illuminate\Http\Response;
 
 class CategoriesController extends Controller {
 
@@ -19,8 +20,7 @@ class CategoriesController extends Controller {
         $query = Category::with('parent');
 
         $categories = $this->filterAndResponse($request, $query);
-
-        return new CategoryCollection($categories);
+        return (new CategoryCollection($categories))->response()->setStatusCode(Response::HTTP_OK);
 
 //        return response()->json(['categories' => $categories], 200);
     }
@@ -41,18 +41,19 @@ class CategoriesController extends Controller {
         $category->description = $request->description;
         $category->parent_id = $request->parent_id != '' ? $request->parent_id : null;
         $category->featured = $request->featured;
-        $category->save();
 
-        $this->insertFeatures($request, $category);
-
-        return response()->json(['success' => 1, 'message' => 'Created successfully', 'category' => $category], 201);
+        if ($category->save()) {
+            $this->insertFeatures($request, $category);
+            return response()->json(['success' => 1, 'message' => 'Created successfully', 'category' => $category], 201);
+        }
+        return response()->json(['success' => 0, 'message' => 'Does not Created successfully'], 500);
     }
 
     public function show($id) {
         $category = Category::with('parent', 'features')->findOrFail($id);
-        return new SingleCategory($category);
-//        echo "<pre>";print_r($category->toArray());exit;
 
+        return (new SingleCategory($category))->response()->setStatusCode(Response::HTTP_OK);
+//        echo "<pre>";print_r($category->toArray());exit;
         return response()->json(['category' => $category], 200);
     }
 
@@ -67,17 +68,18 @@ class CategoriesController extends Controller {
             return response()->json(['success' => 0, 'message' => 'Please fix these errors', 'errors' => $validator->errors()], 500);
         }
 
-        $category->title = $request->input('title');
-        $category->description = $request->input('description');
-        $category->parent_id = $request->input('parent_id') != '' ? $request->input('parent_id') : null;
-        $category->featured = $request->input('featured');
-        $category->save();
+        $category->title = $request->title;
+        $category->description = $request->description;
+        $category->parent_id = $request->parent_id != '' ? $request->parent_id : null;
+        $category->featured = $request->featured;
+        
+        if ($category->save()) {
+            $category->features()->delete();
+            $this->insertFeatures($request, $category);
+            return response()->json(['success' => 1, 'message' => 'Updated successfully', 'category' => $category], 200);
+        }
 
-        $category->features()->delete();
-
-        $this->insertFeatures($request, $category);
-
-        return response()->json(['success' => 1, 'message' => 'Updated successfully', 'category' => $category], 200);
+        return response()->json(['success' => 1, 'message' => 'Does not Updated successfully'], 500);
     }
 
     public function destroy($id) {

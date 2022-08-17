@@ -1,27 +1,35 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
-{
-    public function features()
-    {
+class Category extends Model {
+
+    public function features() {
         return $this->hasMany(CategoryFeature::class, 'category_id');
     }
 
-    public function products()
-    {
+    public function products() {
         return $this->hasMany(Product::class, 'product_id');
     }
 
-    public function children()
-    {
+    public function children() {
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    public function parent()
-    {
+    public function parent() {
         return $this->belongsTo(self::class, 'parent_id');
     }
+
+    public static function getCategoryLevel($category_id, $level = 0) {
+        $category = self::find($category_id);
+        if (!is_null($category->parent_id)) {
+            $level++;
+            return self::getCategoryLevel($category->parent_id, $level);
+        } else {
+            return $level;
+        }
+    }
+
 }

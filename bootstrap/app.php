@@ -79,6 +79,7 @@ $app->middleware([
 ]);
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'super_admin_check' => App\Http\Middleware\SuperAdminMiddlware::class,
 ]);
 
 /*

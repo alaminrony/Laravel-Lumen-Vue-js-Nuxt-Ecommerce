@@ -20,9 +20,9 @@ class CategoriesController extends Controller {
         $query = Category::with('parent');
 
         $categories = $this->filterAndResponse($request, $query);
-        return (new CategoryCollection($categories))->response()->setStatusCode(Response::HTTP_OK);
+//        return (new CategoryCollection($categories))->response()->setStatusCode(Response::HTTP_OK);
 
-//        return response()->json(['categories' => $categories], 200);
+        return response()->json(['categories' => $categories], 200);
     }
 
     public function store(Request $request) {
@@ -52,7 +52,7 @@ class CategoriesController extends Controller {
     public function show($id) {
         $category = Category::with('parent', 'features')->findOrFail($id);
 
-        return (new SingleCategory($category))->response()->setStatusCode(Response::HTTP_OK);
+//        return (new SingleCategory($category))->response()->setStatusCode(Response::HTTP_OK);
 //        echo "<pre>";print_r($category->toArray());exit;
         return response()->json(['category' => $category], 200);
     }
@@ -72,7 +72,7 @@ class CategoriesController extends Controller {
         $category->description = $request->description;
         $category->parent_id = $request->parent_id != '' ? $request->parent_id : null;
         $category->featured = $request->featured;
-        
+
         if ($category->save()) {
             $category->features()->delete();
             $this->insertFeatures($request, $category);
@@ -85,9 +85,9 @@ class CategoriesController extends Controller {
     public function destroy($id) {
         $category = Category::findOrFail($id);
         if ($category->delete()) {
-            return response()->json(['success' => 1, 'message' => 'Deleted successfully'], 200);
+            return response()->json(['success' => 1, 'message' => 'Deleted successfully'], Response::HTTP_OK);
         }
-        return response()->json(['success' => 0, 'message' => 'Deleted done not successfull'], 500);
+        return response()->json(['success' => 0, 'message' => 'Deleted done not successfull'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     protected function filterAndResponse(Request $request, \Illuminate\Database\Eloquent\Builder $query) {
@@ -103,7 +103,7 @@ class CategoriesController extends Controller {
             $query->where('parent_id', $request->filter_by_parent_id);
         }
 
-        $categories = $query->paginate(10);
+        $categories = $query->paginate(5);
         return $categories;
     }
 
@@ -122,13 +122,13 @@ class CategoriesController extends Controller {
     }
 
     public function getCategoryHtmlTree(Request $request, $parent_id = null) {
-        $query = $categories = Category::where('parent_id', $parent_id);
+        $categories = Category::where('parent_id', $parent_id);
 
         if ($request->except_id) {
-            $query->where('id', '!=', $request->except_id)->get();
+            $categories->where('id', '!=', $request->except_id)->get();
         }
 
-        $categories = $query->get();
+        $categories = $categories->get();
 
         foreach ($categories as $category) {
             echo '<option value="' . $category->id . '">' . str_repeat('-', Category::getCategoryLevel($category->id)) . ' ' . $category->title . '</option>';

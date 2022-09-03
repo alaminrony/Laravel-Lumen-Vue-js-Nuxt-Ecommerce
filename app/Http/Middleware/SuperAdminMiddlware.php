@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use App\Traits\Helpers;
 use Closure;
 
 class SuperAdminMiddlware {
+     use Helpers;
 
     /**
      * Handle an incoming request.

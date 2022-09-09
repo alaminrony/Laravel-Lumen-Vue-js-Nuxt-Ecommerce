@@ -20,9 +20,9 @@ class CategoriesController extends Controller {
         $query = Category::with('parent');
 
         $categories = $this->filterAndResponse($request, $query);
-//        return (new CategoryCollection($categories))->response()->setStatusCode(Response::HTTP_OK);
+        return (new CategoryCollection($categories))->response()->setStatusCode(Response::HTTP_OK);
 
-        return response()->json(['categories' => $categories], 200);
+//        return response()->json(['categories' => $categories], 200);
     }
 
     public function store(Request $request) {

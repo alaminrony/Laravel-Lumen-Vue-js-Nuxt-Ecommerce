@@ -5,6 +5,7 @@
 (#) JWT Authentication </br>
 (#) Resource Collection </br>
 (#) Custom Form Request </br>
+(#) Intervention Image used for resize Images</br>
 
 # API covered
 (#) Category CRUD Api </br>

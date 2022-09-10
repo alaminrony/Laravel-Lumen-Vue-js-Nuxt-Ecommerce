@@ -1,9 +1,11 @@
 # Topic covered
 
-(1) Database Migration, Seeding </br>
-(2) Implementing Relationship with Model </br>
-(3) JWT Authentication </br>
-(4) Category CRUD Api </br>
-(5) Brand CRUD Api </br>
-(6) Product CRUD Api </br>
+(#) Database Migration, Seeding </br>
+(#) Implementing Relationship with Model </br>
+(#) JWT Authentication </br>
+(#) Resource Collection </br>
+(#) Custom Form Request </br>
+(#) Category CRUD Api </br>
+(#) Brand CRUD Api </br>
+(#) Product CRUD Api </br>
 

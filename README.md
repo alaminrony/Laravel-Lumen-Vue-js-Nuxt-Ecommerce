@@ -1,7 +1,7 @@
 # Topic covered
 
 (#) Database Migration, Seeding </br>
-(#) Implementing Relationship with Model </br>
+(#) Implementing Relationship with Model (One to One, One to Many)</br>
 (#) JWT Authentication </br>
 (#) Resource Collection </br>
 (#) Custom Form Request </br>

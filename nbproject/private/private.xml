@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/laragon/www/lumen_nuxt_ecommerce/lumen_backend/routes/web.php</file>
             <file>file:/C:/laragon/www/lumen_nuxt_ecommerce/lumen_backend/app/Http/Controllers/BrandsController.php</file>
+            <file>file:/C:/laragon/www/lumen_nuxt_ecommerce/lumen_backend/.env</file>
         </group>
     </open-files>
 </project-private>

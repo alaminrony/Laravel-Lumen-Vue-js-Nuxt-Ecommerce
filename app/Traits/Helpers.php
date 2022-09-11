@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Traits;
-
+use Image;
 trait Helpers {
 
     protected $imagesSizes = [
@@ -20,12 +20,12 @@ trait Helpers {
 
     function createProductUploadDirs($product_id, $imagesSizes) {
         if (!file_exists(base_path('public') . '/uploads/' . $product_id)) {
-            @mkdir(base_path('public') . '/uploads/' . $product_id, 0777);
+            @mkdir(base_path('public') . '/uploads/' . $product_id, 0777,true);
         }
 
         foreach ($imagesSizes as $dirName => $imagesSize) {
             if (!file_exists(base_path('public') . '/uploads/' . $product_id . '/' . $dirName)) {
-                mkdir(base_path('public') . '/uploads/' . $product_id . '/' . $dirName, 0777);
+                mkdir(base_path('public') . '/uploads/' . $product_id . '/' . $dirName, 0777,true);
             }
         }
     }

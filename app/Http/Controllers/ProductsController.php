@@ -6,14 +6,13 @@ use App\Models\Product;
 use App\Models\ProductFeature;
 use App\Models\ProductGallery;
 use App\Traits\Helpers;
-use App\Traits\HomeApi;
+//use App\Traits\HomeApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller {
 
-    use Helpers,
-        HomeApi;
+    use Helpers;
 
     public function __construct() {
         $this->middleware('super_admin_check:store-update-destroy-destroyImage');
